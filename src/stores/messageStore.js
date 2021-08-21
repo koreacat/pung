@@ -5,10 +5,9 @@ function MessageStore(messageObserver) {
     this.messageList = new Map();
 
     this.createMessage = ({ text, time }) => {
-        const sn = this.snCount;
+        const sn = this.snCount++;
         const messageVO = new MessageVO({ sn, text, createdDate: new Date(), time });
         this.messageList.set(sn, messageVO);
-        this.snCount += 1;
         messageObserver.ovserve(this.messageList);
         return messageVO;
     }

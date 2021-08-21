@@ -1,67 +1,101 @@
-import { $, el, getRelocationIndex, getRemainingTime } from "../../util/index.js";
-import Button from "../common/Button.js";
-import Select from "../common/Select.js";
+import { $, getRelocationIndex, getRemainingTime } from "../../util/index.js";
 
 const addOptions = [
-    { value: '3', text: '3초' },
-    { value: '5', text: '5초' },
-    { value: '*2', text: '2배' },
-    { value: '*3', text: '3배' },
+    { value: '3', contents: '3초' },
+    { value: '5', contents: '5초' },
+    { value: '*2', contents: '2배' },
+    { value: '*3', contents: '3배' },
 ]
 
 const subOptions = [
-    { value: 3, text: '3초' },
-    { value: 5, text: '5초' },
+    { value: 3, contents: '3초' },
+    { value: 5, contents: '5초' },
 ]
 
-function ListSelectWrap({ $target, messageVO, messageStore }) {
-    this.$el = el('div');
-    const { messageList, deleteMessage } = messageStore;
-    let addSelectorRef = null;
-    let subSelectorRef = null;
+export default class ListSelectWrap {
 
-    const addTime = () => {
-        const time = Number(messageVO.time);
-        const value = addSelectorRef.$el.value;
+    constructor($target, $props) {
+        this.$target = $target;
+        this.$props = $props;
+        this.render();
+        this.addEvent();
+    }
+
+    addTime = () => {
+        const { messageVO, messageStore } = this.$props;
+        const { messageList } = messageStore;
+        const { sn, time, setTime } = messageVO;
+        const value = $(`[data-add-select='${sn}']`)[0].value;
 
         if (value[0] === '*') {
             const remainingTime = getRemainingTime(messageVO);
-            messageVO.setTime(time + (Number(value.substr(1)) * remainingTime - remainingTime));
+            setTime(time + (Number(value.substr(1)) * remainingTime - remainingTime));
         } else {
-            messageVO.setTime(time + Number(value));
+            setTime(time + Number(value));
         }
 
         let index = getRelocationIndex({ messageVO, messageList });
-        $('#messageList').insertBefore($target, $(`[data-sn]`)[index]);
+        $('.messageList')[0].insertBefore(this.$target, $(`[data-list-sn]`)[index]);
     }
 
-    const subTime = () => {
-        const time = Number(messageVO.time);
-        const value = subSelectorRef.$el.value;
+    subTime = () => {
+        const { messageVO, messageStore } = this.$props;
+        const { messageList, deleteMessage } = messageStore;
+        const { sn, time, setTime } = messageVO;
+        const value = $(`[data-sub-select='${sn}']`)[0].value;
 
-        if (messageVO.time - Number(value) <= 0) {
-            deleteMessage(messageVO.sn);
+        if (time - Number(value) <= 0) {
+            deleteMessage(sn);
         } else {
-            messageVO.setTime(time - Number(value));
+            setTime(time - Number(value));
         }
 
         let index = getRelocationIndex({ messageVO, messageList });
-        $('#messageList').insertBefore($target, $(`[data-sn]`)[index].nextSibling);
+        $('.messageList')[0].insertBefore(this.$target, $(`[data-list-sn]`)[index].nextSibling);
     }
 
-    const init = () => { }
-
-    const render = () => {
-        addSelectorRef = new Select({ $target: this.$el, options: addOptions, id: 'addSelect' });
-        new Button({ $target: this.$el, name: '시간 추가', onClickHandle: addTime });
-        subSelectorRef = new Select({ $target: this.$el, options: subOptions, id: 'subSelect' });
-        new Button({ $target: this.$el, name: '시간 감소', onClickHandle: subTime });
-        new Button({ $target: this.$el, name: '삭제', onClickHandle: () => deleteMessage(messageVO.sn) });
-        $target.appendChild(this.$el);
+    render() {
+        this.$target.innerHTML += this.template();
     }
 
-    init();
-    render();
+    template () {
+        const { messageVO } = this.$props;
+        const { sn } = messageVO;
+
+        return `
+            <select class='addSelect' data-add-select='${sn}'>
+                ${addOptions.map((option) => {
+                    const {value, contents} = option;
+                    return `<option value='${value}'>${contents}</option>`
+                })}
+            </select>
+            <button class='addTimeBtn' data-add-btn='${sn}'>시간 추가</button>
+            <select class='subSelect' data-sub-select='${sn}'>
+                ${subOptions.map((option) => {
+                    const {value, contents} = option;
+                    return `<option value='${value}'>${contents}</option>`
+                })}
+            </select>
+            <button class='subTimeBtn' data-sub-btn='${sn}'>시간 감소</button>
+            <button class='deleteBtn' data-delete-btn='${sn}'>삭제</button>
+        `
+    }
+
+    addEvent() {
+        const { messageVO, messageStore } = this.$props;
+        const { deleteMessage } = messageStore;
+        const sn = messageVO.sn;
+
+        $(`[data-add-btn='${sn}']`)[0].addEventListener('click', () => {
+            this.addTime();
+        })
+
+        $(`[data-sub-btn='${sn}']`)[0].addEventListener('click', () => {
+            this.subTime();
+        })
+
+        $(`[data-delete-btn='${sn}']`)[0].addEventListener('click', () => {
+            deleteMessage(sn);
+        })
+    }
 }
-
-export default ListSelectWrap;

@@ -2,25 +2,25 @@ import { $, el, getRelocationIndex } from "../../util/index.js";
 import ListSelectWrap from "../listSelectWrap/ListSelectWrap.js";
 import Timer from "../timer/Timer.js";
 
-function Message({ $target, messageStore, text, time }) {
-    this.$el = el('li');
+export default class Message {
 
-    const { createMessage, messageList } = messageStore;
-    const messageVO = createMessage({ text, time});
-
-    const init = () => {
-        this.$el.dataset.sn = messageVO.sn;
+    constructor($target, $props) {
+        this.$target = $target;
+        this.$props = $props;
+        this.template();
     }
 
-    const render = () => {
+    template () {
+        const $el = el('li');
+        const { messageStore, text, time } = this.$props;
+        const { createMessage, messageList } = messageStore;
+        const messageVO = createMessage({ text, time});
+        $el.dataset.listSn = messageVO.sn;
+
         let index = getRelocationIndex({ messageVO, messageList });
-        $target.insertBefore(this.$el, $(`[data-sn]`)[index]);
-        new Timer({ $target: this.$el, messageVO: messageVO });
-        new ListSelectWrap({ $target: this.$el, messageVO: messageVO, messageStore });
+        this.$target.insertBefore($el, $(`[data-list-sn]`)[index]);
+        new Timer( $el, { messageVO });
+        new ListSelectWrap($el, { messageVO, messageStore });
     }
 
-    init();
-    render();
 }
-
-export default Message;

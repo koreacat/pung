@@ -1,47 +1,50 @@
-import { $, el } from "../../util/index.js";
-import Button from "../common/Button.js";
-import Input from "../common/Input.js";
-import Select from "../common/Select.js";
+import { $ } from "../../util/index.js";
+import Component from "../common/Component.js";
 import Message from "../message/Message.js";
 
 const timeOptions = [
-    { value: '3', text: '3초' },
-    { value: '5', text: '5초' },
-    { value: '10', text: '10초' },
-    { value: '30', text: '30초' },
-    { value: '60', text: '1분' },
+    { value: '3', contents: '3초' },
+    { value: '5', contents: '5초' },
+    { value: '10', contents: '10초' },
+    { value: '30', contents: '30초' },
+    { value: '60', contents: '1분' },
 ]
 
-function MessageCreator({$target, messageStore }) {
-    this.$el = el('div');
+export default class MessageCreator extends Component {
+    template() {
+        return `
+            <span>메세지</span>
+            <input type='text' class='messageInput'>
+            <span>시간</span>
+            <select class='timeSelect'>
+                ${timeOptions.map((option) => {
+                    const {value, contents} = option;
+                    return `<option value='${value}'>${contents}</option>`
+                })}
+            </select>
+            <button class='createBtn'>추가</button>
+        `
+    }
 
-    const handleCreate = () => {
-        const $messageInput = $('#messageInput');
+    setEvent() {
+        this.addEvent('click', '.createBtn', () => {
+            this.handleCreate()
+        });
+    }
+
+    handleCreate = () => {
+        const { messageStore } = this.$props;
+        const $messageInput = $('.messageInput')[0];
         const text = $messageInput.value;
-        const time = $('#timeSelect').value;
-        
+        const time = $('.timeSelect')[0].value;
+
         if (!text || text.length < 3) {
             alert('최소 3글자 이상 입력해주세요.');
             return;
         }
-
-        new Message({ $target: $('#messageList'), messageStore, text, time });
+        
+        new Message($('.messageList')[0], { messageStore, text, time });
         $messageInput.value = null;
     }
 
-    const init = () => {}
-
-    const render = () => {
-        this.$el.innerHTML += `<span>메세지</span>`;
-        new Input({ $target: this.$el, id: 'messageInput', type: 'text' });
-        this.$el.innerHTML += `<span>시간</span>`;
-        new Select({ $target: this.$el, options: timeOptions, id: 'timeSelect' });
-        new Button({ $target: this.$el, name: '추가', onClickHandle: handleCreate });
-        $target.appendChild(this.$el);
-    }
-
-    init();
-    render();
 }
-
-export default MessageCreator;

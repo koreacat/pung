@@ -1,18 +1,9 @@
-import { el } from "../../util/index.js";
+import Component from "../common/Component.js";
 
-function Title({$target, name}) {
-    this.$el = el('h1');
-
-    const init = () => {
-        this.$el.innerHTML = name;
+export default class Title extends Component {
+    template() {
+        const {contents} = this.$props;
+        return `<h1>${contents}</h1>`;
     }
 
-    const render = () => {
-        $target.appendChild(this.$el);
-    }
-
-    init();
-    render();
 }
-
-export default Title;

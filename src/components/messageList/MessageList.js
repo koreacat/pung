@@ -1,18 +1,7 @@
-import { el } from "../../util/index.js";
+import Component from "../common/Component.js";
 
-function MessageList({ $target }) {
-    this.$el = el('ul');
-
-    const init = () => {
-        this.$el.id = ('messageList');
+export default class MessageList extends Component {
+    template() {
+        return `<ul class='messageList'></ul>`
     }
-    
-    const render = () => {
-        $target.appendChild(this.$el);
-    }
-
-    init();
-    render();
 }
-
-export default MessageList;

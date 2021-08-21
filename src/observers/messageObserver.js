@@ -4,10 +4,10 @@ function MessageObserver() {
     this.interval = null;
 
     this.deleteMessageEl = (sn) => {
-        const $messageList = $('#messageList');
+        const $messageList = $('.messageList')[0];
         const $listItems = $messageList.childNodes;
         $listItems.forEach(($item) => {
-            if (Number($item.dataset.sn) === sn) $item.remove();
+            if (Number($item.dataset.listSn) === sn) $item.remove();
         })
     }
 

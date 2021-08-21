@@ -1,26 +1,28 @@
-import { el, getRemainingTime } from "../../util/index.js";
+import { getRemainingTime } from "../../util/index.js";
 
-function Timer({ $target, messageVO }) {
-    this.$el = el('div');
-    const { text, sn } = messageVO;
-    const remainingTime = parseInt(getRemainingTime(messageVO));
+export default class Timer {
 
-    const init = () => {
-        this.$el.innerHTML = `
+    constructor($target, $props) {
+        this.$target = $target;
+        this.$props = $props;
+        this.render();
+    }
+
+    render() {
+        this.$target.innerHTML += this.template();
+    }
+
+    template () {
+        const { messageVO } = this.$props;
+        const { text, sn } = messageVO;
+        const remainingTime = parseInt(getRemainingTime(messageVO));
+
+        return `
             <div>
                 <span>${text}</span>
                 <span>남은 시간: </span>
                 <span class='time' data-time-sn='${sn}'>${remainingTime}</span>
             </div>
-        `;
+        `
     }
-
-    const render = () => {
-        $target.appendChild(this.$el);
-    }
-
-    init();
-    render();
 }
-
-export default Timer;

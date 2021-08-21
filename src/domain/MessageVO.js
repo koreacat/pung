@@ -1,10 +1,12 @@
-function MessageVO({sn, text, createdDate, time}) {
-    this.sn = sn;
-    this.text = text;
-    this.createdDate = createdDate;
-    this.time = time;
+export default class MessageVO {
+    constructor({sn, text, createdDate, time}) {
+        this.sn = sn;
+        this.text = text;
+        this.createdDate = createdDate;
+        this.time = Number(time);
+    }
 
-    this.setTime = (time) => {
+    setTime = (time) => {
         if(time >= Math.max) {
             this.time = Math.max;
             return;
@@ -13,5 +15,3 @@ function MessageVO({sn, text, createdDate, time}) {
         this.time = time;
     }
 }
-
-export default MessageVO;
