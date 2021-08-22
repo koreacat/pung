@@ -1,25 +1,20 @@
-import { $, el, getRelocationIndex } from "../../util/index.js";
+import { el, getRelocationIndex } from "../../util/index.js";
+import Component from "../common/Component.js";
 import ListSelectWrap from "../listSelectWrap/ListSelectWrap.js";
 import Timer from "../timer/Timer.js";
 
-export default class Message {
+export default class Message extends Component {
 
-    constructor($target, $props) {
-        this.$target = $target;
-        this.$props = $props;
-        this.template();
-    }
-
-    template () {
-        const $el = el('li');
+    render() {
         const { messageStore, text, time } = this.$props;
         const { createMessage, messageList } = messageStore;
-        const messageVO = createMessage({ text, time});
-        $el.dataset.listSn = messageVO.sn;
+        const messageVO = createMessage({ text, time });
+        const $el = el('li');
+        $el.dataset.sn = messageVO.sn;
 
         let index = getRelocationIndex({ messageVO, messageList });
-        this.$target.insertBefore($el, $(`[data-list-sn]`)[index]);
-        new Timer( $el, { messageVO });
+        this.$target.insertBefore($el, document.querySelectorAll(`[data-sn]`)[index]);
+        new Timer($el, { messageVO });
         new ListSelectWrap($el, { messageVO, messageStore });
     }
 

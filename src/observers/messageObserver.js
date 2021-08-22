@@ -1,27 +1,31 @@
-import { $, getRemainingTime } from "../util/index.js";
+import { getRemainingTime } from "../util/index.js";
 
 function MessageObserver() {
     this.interval = null;
 
     this.deleteMessageEl = (sn) => {
-        const $messageList = $('.messageList')[0];
+        const $messageList = document.querySelector('.messageList');
         const $listItems = $messageList.childNodes;
+
         $listItems.forEach(($item) => {
-            if (Number($item.dataset.listSn) === sn) $item.remove();
+            if (Number($item.dataset.sn) === sn) $item.remove();
         })
     }
 
     this.updateTimeEl = (messageList) => {
-        const $times = $('.time');
+        const $times = document.querySelectorAll('.time');
+
         $times.forEach($time => {
             const sn = Number($time.dataset.timeSn);
             const messageVO = messageList.get(sn);
+
             if (!messageVO) {
                 this.deleteMessageEl(sn);
                 return;
             }
 
             const remainingTime = getRemainingTime(messageVO);
+            
             if (remainingTime >= 0) {
                 $time.innerHTML = parseInt(Math.ceil(remainingTime));
             } else {
@@ -34,6 +38,7 @@ function MessageObserver() {
     this.ovserve = (messageList) => {
         if (messageList.size > 0 && !this.interval) {
             console.log('start ovserve');
+
             this.interval = setInterval(() => {
                 console.log('ovserving');
                 this.updateTimeEl(messageList);

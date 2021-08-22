@@ -1,4 +1,3 @@
-import { $ } from "../../util/index.js";
 import Component from "../common/Component.js";
 import Message from "../message/Message.js";
 
@@ -18,9 +17,9 @@ export default class MessageCreator extends Component {
             <span>시간</span>
             <select class='timeSelect'>
                 ${timeOptions.map((option) => {
-                    const {value, contents} = option;
-                    return `<option value='${value}'>${contents}</option>`
-                })}
+            const { value, contents } = option;
+            return `<option value='${value}'>${contents}</option>`
+        })}
             </select>
             <button class='createBtn'>추가</button>
         `
@@ -32,18 +31,18 @@ export default class MessageCreator extends Component {
         });
     }
 
-    handleCreate = () => {
+    handleCreate() {
         const { messageStore } = this.$props;
-        const $messageInput = $('.messageInput')[0];
+        const $messageInput = this.$target.querySelector('.messageInput');
         const text = $messageInput.value;
-        const time = $('.timeSelect')[0].value;
+        const time = this.$target.querySelector('.timeSelect').value;
 
         if (!text || text.length < 3) {
             alert('최소 3글자 이상 입력해주세요.');
-            return;
+            throw new Error('최소 3글자 이상 입력해주세요.');
         }
-        
-        new Message($('.messageList')[0], { messageStore, text, time });
+
+        new Message(document.querySelector('.messageList'), { messageStore, text, time });
         $messageInput.value = null;
     }
 

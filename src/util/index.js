@@ -1,11 +1,3 @@
-export const $ = (query) => {
-    if (query[0] == '#') {
-        return document.querySelector(query)
-    } else {
-        return document.querySelectorAll(query)
-    }
-};
-
 export const el = (tagName) => {
     return document.createElement(tagName);
 }

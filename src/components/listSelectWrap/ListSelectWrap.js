@@ -1,4 +1,5 @@
-import { $, getRelocationIndex, getRemainingTime } from "../../util/index.js";
+import { getRelocationIndex, getRemainingTime } from "../../util/index.js";
+import Component from "../common/Component.js";
 
 const addOptions = [
     { value: '3', contents: '3초' },
@@ -12,20 +13,13 @@ const subOptions = [
     { value: 5, contents: '5초' },
 ]
 
-export default class ListSelectWrap {
+export default class ListSelectWrap extends Component {
 
-    constructor($target, $props) {
-        this.$target = $target;
-        this.$props = $props;
-        this.render();
-        this.addEvent();
-    }
-
-    addTime = () => {
+    handleAddTime() {
         const { messageVO, messageStore } = this.$props;
         const { messageList } = messageStore;
-        const { sn, time, setTime } = messageVO;
-        const value = $(`[data-add-select='${sn}']`)[0].value;
+        const { time, setTime } = messageVO;
+        const value = this.$target.querySelector('.addSelect').value;
 
         if (value[0] === '*') {
             const remainingTime = getRemainingTime(messageVO);
@@ -34,15 +28,16 @@ export default class ListSelectWrap {
             setTime(time + Number(value));
         }
 
+        //observer의 역할?
         let index = getRelocationIndex({ messageVO, messageList });
-        $('.messageList')[0].insertBefore(this.$target, $(`[data-list-sn]`)[index]);
+        document.querySelector('.messageList').insertBefore(this.$target, document.querySelectorAll(`[data-sn]`)[index]);
     }
 
-    subTime = () => {
+    handleSubTime() {
         const { messageVO, messageStore } = this.$props;
         const { messageList, deleteMessage } = messageStore;
         const { sn, time, setTime } = messageVO;
-        const value = $(`[data-sub-select='${sn}']`)[0].value;
+        const value = this.$target.querySelector('.subSelect').value;
 
         if (time - Number(value) <= 0) {
             deleteMessage(sn);
@@ -50,52 +45,50 @@ export default class ListSelectWrap {
             setTime(time - Number(value));
         }
 
+        //observer의 역할?
         let index = getRelocationIndex({ messageVO, messageList });
-        $('.messageList')[0].insertBefore(this.$target, $(`[data-list-sn]`)[index].nextSibling);
+        document.querySelector('.messageList').insertBefore(this.$target, document.querySelectorAll(`[data-sn]`)[index].nextSibling);
     }
 
     render() {
         this.$target.innerHTML += this.template();
     }
 
-    template () {
-        const { messageVO } = this.$props;
-        const { sn } = messageVO;
-
+    template() {
         return `
-            <select class='addSelect' data-add-select='${sn}'>
+            <select class='addSelect'>
                 ${addOptions.map((option) => {
-                    const {value, contents} = option;
-                    return `<option value='${value}'>${contents}</option>`
-                })}
+            const { value, contents } = option;
+            return `<option value='${value}'>${contents}</option>`
+        })}
             </select>
-            <button class='addTimeBtn' data-add-btn='${sn}'>시간 추가</button>
-            <select class='subSelect' data-sub-select='${sn}'>
+            <button class='addTimeBtn'>시간 추가</button>
+            <select class='subSelect'>
                 ${subOptions.map((option) => {
-                    const {value, contents} = option;
-                    return `<option value='${value}'>${contents}</option>`
-                })}
+            const { value, contents } = option;
+            return `<option value='${value}'>${contents}</option>`
+        })}
             </select>
-            <button class='subTimeBtn' data-sub-btn='${sn}'>시간 감소</button>
-            <button class='deleteBtn' data-delete-btn='${sn}'>삭제</button>
+            <button class='subTimeBtn'>시간 감소</button>
+            <button class='deleteBtn'>삭제</button>
         `
     }
 
-    addEvent() {
+    setEvent() {
         const { messageVO, messageStore } = this.$props;
         const { deleteMessage } = messageStore;
         const sn = messageVO.sn;
 
-        $(`[data-add-btn='${sn}']`)[0].addEventListener('click', () => {
-            this.addTime();
-        })
+        this.addEvent('click', '.addTimeBtn', () => {
+            this.handleAddTime();
+        });
 
-        $(`[data-sub-btn='${sn}']`)[0].addEventListener('click', () => {
-            this.subTime();
-        })
+        this.addEvent('click', '.subTimeBtn', () => {
+            this.handleSubTime();
+        });
 
-        $(`[data-delete-btn='${sn}']`)[0].addEventListener('click', () => {
+        this.addEvent('click', '.deleteBtn', () => {
             deleteMessage(sn);
-        })
+        });
     }
 }

@@ -22,7 +22,7 @@ export default class Component {
         this.mounted();
     }
 
-    setEvent () {}
+    setEvent() { }
 
     setState(newState) {
         this.$state = { ...this.$state, ...newState };

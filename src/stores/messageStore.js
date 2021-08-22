@@ -15,7 +15,7 @@ function MessageStore(messageObserver) {
     this.deleteMessage = (sn) => {
         this.messageList.delete(sn);
     }
-    
+
 }
 
 export default MessageStore;

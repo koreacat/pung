@@ -6,13 +6,13 @@ import MessageCreator from './components/messageCreator/MessageCreator.js';
 import MessageList from './components/messageList/MessageList.js';
 
 export default class App extends Component {
-    setup () {
+    setup() {
         this.$state = {
             messageStore: new MessageStore(new MessageObserver())
         }
     }
 
-    template () {
+    template() {
         return `
             <header class="header"></header>
             <div class="messageCreatorWrap"></div>
@@ -20,13 +20,13 @@ export default class App extends Component {
         `
     }
 
-    mounted () {
+    mounted() {
         const { messageStore } = this.$state;
         const $header = this.$target.querySelector('.header');
         const $messageCreator = this.$target.querySelector('.messageCreatorWrap');
         const $messageList = this.$target.querySelector('.messageListWrap');
-        new Title($header, {contents: '펑 리스트'});
-        new MessageCreator($messageCreator, {messageStore: messageStore});
+        new Title($header, { contents: '펑 리스트' });
+        new MessageCreator($messageCreator, { messageStore: messageStore });
         new MessageList($messageList, {});
     }
 

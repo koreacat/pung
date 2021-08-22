@@ -1,18 +1,13 @@
 import { getRemainingTime } from "../../util/index.js";
+import Component from "../common/Component.js";
 
-export default class Timer {
-
-    constructor($target, $props) {
-        this.$target = $target;
-        this.$props = $props;
-        this.render();
-    }
+export default class Timer extends Component {
 
     render() {
         this.$target.innerHTML += this.template();
     }
 
-    template () {
+    template() {
         const { messageVO } = this.$props;
         const { text, sn } = messageVO;
         const remainingTime = parseInt(getRemainingTime(messageVO));
