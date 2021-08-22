@@ -29,6 +29,11 @@ export default class MessageCreator extends Component {
         this.addEvent('click', '.createBtn', () => {
             this.handleCreate()
         });
+
+        this.addEvent('keyup', '.messageInput', ({ key, target }) => {
+            if(key !== 'Enter') return;
+            this.handleCreate();
+        });
     }
 
     handleCreate() {

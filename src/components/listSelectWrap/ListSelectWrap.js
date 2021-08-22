@@ -28,7 +28,6 @@ export default class ListSelectWrap extends Component {
             setTime(time + Number(value));
         }
 
-        //observer의 역할?
         let index = getRelocationIndex({ messageVO, messageList });
         document.querySelector('.messageList').insertBefore(this.$target, document.querySelectorAll(`[data-sn]`)[index]);
     }
@@ -45,7 +44,6 @@ export default class ListSelectWrap extends Component {
             setTime(time - Number(value));
         }
 
-        //observer의 역할?
         let index = getRelocationIndex({ messageVO, messageList });
         document.querySelector('.messageList').insertBefore(this.$target, document.querySelectorAll(`[data-sn]`)[index].nextSibling);
     }
@@ -57,17 +55,15 @@ export default class ListSelectWrap extends Component {
     template() {
         return `
             <select class='addSelect'>
-                ${addOptions.map((option) => {
-            const { value, contents } = option;
-            return `<option value='${value}'>${contents}</option>`
-        })}
+                ${addOptions.map(({ value, contents }) => {
+                    return `<option value='${value}'>${contents}</option>`
+                })}
             </select>
             <button class='addTimeBtn'>시간 추가</button>
             <select class='subSelect'>
-                ${subOptions.map((option) => {
-            const { value, contents } = option;
-            return `<option value='${value}'>${contents}</option>`
-        })}
+                ${subOptions.map(({ value, contents }) => {
+                    return `<option value='${value}'>${contents}</option>`
+                })}
             </select>
             <button class='subTimeBtn'>시간 감소</button>
             <button class='deleteBtn'>삭제</button>
