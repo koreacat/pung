@@ -21,12 +21,12 @@ export default class App extends Component {
     }
 
     mounted() {
-        const { messageStore } = this.$state;
+        const {messageStore} = this.$state;
         const $header = this.$target.querySelector('.header');
         const $messageCreator = this.$target.querySelector('.messageCreatorWrap');
         const $messageList = this.$target.querySelector('.messageListWrap');
-        new Title($header, { contents: '펑 리스트' });
-        new MessageCreator($messageCreator, { messageStore: messageStore });
+        new Title($header, {contents: '펑 리스트'});
+        new MessageCreator($messageCreator, {messageStore: messageStore});
         new MessageList($messageList, {});
     }
 

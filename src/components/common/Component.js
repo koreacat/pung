@@ -11,21 +11,23 @@ export default class Component {
         this.render();
     }
 
-    setup() { };
+    setup() {};
 
-    mounted() { };
+    mounted() {};
 
-    template() { return ''; }
+    template() {
+        return '';
+    }
 
     render() {
         this.$target.innerHTML = this.template();
         this.mounted();
     }
 
-    setEvent() { }
+    setEvent() {}
 
     setState(newState) {
-        this.$state = { ...this.$state, ...newState };
+        this.$state = {...this.$state, ...newState};
         this.render();
     }
 

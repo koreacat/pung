@@ -1,4 +1,4 @@
-import { getRemainingTime } from "../util/index.js";
+import {getRemainingTime} from "../util/index.js";
 
 function MessageObserver() {
     this.interval = null;
@@ -10,7 +10,7 @@ function MessageObserver() {
         $listItems.forEach(($item) => {
             if (Number($item.dataset.sn) === sn) $item.remove();
         })
-    }
+    };
 
     this.updateTimeEl = (messageList) => {
         const $times = document.querySelectorAll('.time');
@@ -33,7 +33,7 @@ function MessageObserver() {
                 messageList.delete(sn);
             }
         });
-    }
+    };
 
     this.observe = (messageList) => {
         if (messageList.size > 0 && !this.interval) {
@@ -45,7 +45,7 @@ function MessageObserver() {
                 if (messageList.size <= 0 && this.interval) this.stopObserve();
             }, 100);
         }
-    }
+    };
 
     this.stopObserve = () => {
         console.log('stop observe');

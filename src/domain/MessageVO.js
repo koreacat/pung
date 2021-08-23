@@ -1,5 +1,5 @@
 export default class MessageVO {
-    constructor({ sn, text, createdDate, time }) {
+    constructor({sn, text, createdDate, time}) {
         this.sn = sn;
         this.text = text;
         this.createdDate = createdDate;
