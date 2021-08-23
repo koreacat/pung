@@ -8,7 +8,7 @@ function MessageStore(messageObserver) {
         const sn = this.snCount++;
         const messageVO = new MessageVO({ sn, text, createdDate: new Date(), time });
         this.messageList.set(sn, messageVO);
-        messageObserver.ovserve(this.messageList);
+        messageObserver.observe(this.messageList);
         return messageVO;
     }
 

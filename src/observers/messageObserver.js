@@ -25,7 +25,7 @@ function MessageObserver() {
             }
 
             const remainingTime = getRemainingTime(messageVO);
-            
+
             if (remainingTime >= 0) {
                 $time.innerHTML = parseInt(Math.ceil(remainingTime));
             } else {
@@ -35,20 +35,20 @@ function MessageObserver() {
         });
     }
 
-    this.ovserve = (messageList) => {
+    this.observe = (messageList) => {
         if (messageList.size > 0 && !this.interval) {
-            console.log('start ovserve');
+            console.log('start observe');
 
             this.interval = setInterval(() => {
-                console.log('ovserving');
+                console.log('observing');
                 this.updateTimeEl(messageList);
-                if (messageList.size <= 0 && this.interval) this.stopOvserve();
+                if (messageList.size <= 0 && this.interval) this.stopObserve();
             }, 100);
         }
     }
 
-    this.stopOvserve = () => {
-        console.log('stop ovserve');
+    this.stopObserve = () => {
+        console.log('stop observe');
         clearInterval(this.interval);
         this.interval = null;
     }
