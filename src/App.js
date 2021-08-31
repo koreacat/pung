@@ -15,7 +15,8 @@ export default class App extends Component {
     template() {
         return `
             <header class="header"></header>
-            <div class="messageCreatorWrap"></div>
+            <div class="messageC
+            reatorWrap"></div>
             <div class="messageListWrap"></div>
         `
     }
