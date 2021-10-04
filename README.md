@@ -7,3 +7,4 @@ npx http-server
 todo 
 
  - web component
+ - virtual dom
